@@ -57,7 +57,7 @@ const AlertItem = ({ alert, onResolve, onFix, index }) => {
     >
       {/* Left glow */}
       <div style={{
-        position: "absolute",
+        position: "absolute", 
         left: 0,
         top: 0,
         bottom: 0,
