@@ -34,6 +34,7 @@ const Login = () => {
       fontFamily: "'Inter', system-ui, sans-serif",
       overflow: "hidden",
       position: "relative",
+      flexWrap: "wrap",
     }}>
 
       {/* Top left aurora */}
@@ -102,11 +103,16 @@ const Login = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
-          flex: 1, display: "flex", flexDirection: "column",
-          justifyContent: "space-between", padding: "44px 64px",
-          position: "relative", zIndex: 1,
-          borderRight: "1px solid rgba(255,255,255,0.03)",
-        }}
+        flex: 1,
+        minWidth: "300px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "44px clamp(24px, 4vw, 64px)",
+        position: "relative",
+        zIndex: 1,
+        borderRight: "1px solid rgba(255,255,255,0.03)",
+      }}
       >
         {/* Logo */}
         <motion.div
@@ -166,9 +172,13 @@ const Login = () => {
 
           {/* Heading */}
           <h1 style={{
-            fontSize: "60px", fontWeight: "800",
-            lineHeight: "1.04", letterSpacing: "-3px",
-            margin: "0 0 24px", maxWidth: "560px",
+          fontSize: "clamp(32px, 4vw, 60px)",
+          fontWeight: "800",
+          lineHeight: "1.04",
+          letterSpacing: "-2px",
+          margin: "0 0 24px",
+          maxWidth: "560px",
+          fontFamily: "'Syne', sans-serif",
           }}>
             <span style={{ color: "#f8fafc" }}>The future of</span>
             <br />
@@ -277,10 +287,14 @@ const Login = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
-          width: "500px", display: "flex",
-          alignItems: "center", justifyContent: "center",
-          padding: "44px", position: "relative", zIndex: 1,
-        }}
+        width: "clamp(320px, 40vw, 500px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "44px clamp(20px, 3vw, 44px)",
+        position: "relative",
+        zIndex: 1,
+      }}
       >
         <div style={{ width: "100%", maxWidth: "360px" }}>
           <motion.div
@@ -466,7 +480,6 @@ const Login = () => {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        input::placeholder { color: #1e293b !important; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
       `}</style>
     </div>

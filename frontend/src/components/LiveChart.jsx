@@ -150,9 +150,10 @@ const LiveChart = ({ title, data, dataKey, color, unit, type, index }) => {
           <AreaChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
             <defs>
               <linearGradient id={`grad-${dataKey}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color} stopOpacity={0.15} />
-                <stop offset="95%" stopColor={color} stopOpacity={0} />
-              </linearGradient>
+              <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+              <stop offset="50%" stopColor={color} stopOpacity={0.1} />
+              <stop offset="95%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
@@ -175,9 +176,10 @@ const LiveChart = ({ title, data, dataKey, color, unit, type, index }) => {
               type="monotone"
               dataKey={dataKey}
               stroke={color}
-              strokeWidth={1.5}
+              strokeWidth={2}
               fill={`url(#grad-${dataKey})`}
               dot={false}
+              strokeLinecap="round"
               activeDot={{
                 r: 4,
                 fill: color,

@@ -201,17 +201,19 @@ const Dashboard = () => {
               </span>
             </motion.div>
 
-            <h1 style={{
-              fontSize: "36px",
-              fontWeight: "800",
-              letterSpacing: "-1.5px",
-              margin: "0 0 8px",
-              color: "#f8fafc",
-              lineHeight: 1.1,
-            }}>
-              {displayed}
-              {!done && <span className="cursor" />}
-            </h1>
+           <h1 style={{
+             fontSize: "36px",
+             fontWeight: "800",
+             letterSpacing: "-1.5px",
+             margin: "0 0 8px",
+             lineHeight: 1.1,
+             background: "linear-gradient(135deg, #f8fafc 0%, #a78bfa 50%, #38bdf8 100%)",
+             WebkitBackgroundClip: "text",
+             WebkitTextFillColor: "transparent",
+           }}>
+             {displayed}
+             {!done && <span className="cursor" />}
+           </h1>
             <p style={{ fontSize: "13px", color: "#334155", margin: 0 }}>
               Monitoring {totalServices} services • {activeAlerts > 0
                 ? `${activeAlerts} anomalies detected`

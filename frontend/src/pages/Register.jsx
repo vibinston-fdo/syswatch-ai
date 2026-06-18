@@ -191,7 +191,9 @@ const Register = () => {
           </motion.div>
 
           <h1 style={{
-            fontSize: "56px", fontWeight: "800",
+            fontSize: "clamp(28px, 3.5vw, 56px)",
+            fontWeight: "800",
+            fontFamily: "'Syne', sans-serif",
             lineHeight: "1.04", letterSpacing: "-3px",
             margin: "0 0 24px", maxWidth: "520px",
           }}>

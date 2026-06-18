@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
-import CountUp from "react-countup";
 
 const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => {
-
-  const stringValue = typeof value === "number" ? value.toString() : value;
-  const numericValue = parseFloat(stringValue);
-  const isNumber = !isNaN(numericValue) && stringValue !== "—";
-  const suffix = isNumber ? stringValue.replace(numericValue.toString(), "") : "";
 
   return (
     <motion.div
@@ -33,10 +27,8 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "absolute",
-          top: "-40px",
-          right: "-40px",
-          width: "120px",
-          height: "120px",
+          top: "-40px", right: "-40px",
+          width: "120px", height: "120px",
           borderRadius: "50%",
           background: `radial-gradient(circle, ${glowColor || "rgba(124,58,237,0.15)"} 0%, transparent 70%)`,
           pointerEvents: "none",
@@ -45,11 +37,8 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
 
       {/* Top shimmer line */}
       <div style={{
-        position: "absolute",
-        top: 0,
-        left: "20%",
-        right: "20%",
-        height: "1px",
+        position: "absolute", top: 0,
+        left: "20%", right: "20%", height: "1px",
         background: `linear-gradient(90deg, transparent, ${glowColor || "rgba(124,58,237,0.5)"}, transparent)`,
       }} />
 
@@ -58,39 +47,31 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.5 }}
         style={{
-          fontSize: "22px",
-          marginBottom: "16px",
+          fontSize: "22px", marginBottom: "16px",
           filter: `drop-shadow(0 0 8px ${glowColor || "rgba(124,58,237,0.5)"})`,
         }}
       >{icon}</motion.div>
 
-      {/* Animated number */}
-      <div style={{
-        fontSize: "32px",
-        fontWeight: "700",
-        color: "#f8fafc",
-        letterSpacing: "-1.5px",
-        lineHeight: 1,
-        marginBottom: "8px",
-        fontFamily: "'Inter', system-ui, sans-serif",
-      }}>
-        {isNumber ? (
-          <CountUp
-            end={numericValue}
-            duration={1.5}
-            decimals={value.includes(".") ? 1 : 0}
-            suffix={suffix}
-            delay={index * 0.1}
-          />
-        ) : value}
-      </div>
+      {/* Value */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: index * 0.1 + 0.2, type: "spring", bounce: 0.4 }}
+        style={{
+          fontSize: "32px",
+          fontWeight: "700",
+          color: "#f8fafc",
+          letterSpacing: "-1.5px",
+          lineHeight: 1,
+          marginBottom: "8px",
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}
+      >{value}</motion.div>
 
       {/* Label */}
       <div style={{
-        fontSize: "11px",
-        color: "#334155",
-        letterSpacing: "1px",
-        marginBottom: "6px",
+        fontSize: "11px", color: "#334155",
+        letterSpacing: "1px", marginBottom: "6px",
         fontFamily: "'Inter', system-ui, sans-serif",
       }}>{label}</div>
 
@@ -104,15 +85,11 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
           color: subColor || "#4ade80",
           fontWeight: "500",
           fontFamily: "'Inter', system-ui, sans-serif",
-          display: "flex",
-          alignItems: "center",
-          gap: "4px",
+          display: "flex", alignItems: "center", gap: "4px",
         }}
       >
         <div style={{
-          width: "4px",
-          height: "4px",
-          borderRadius: "50%",
+          width: "4px", height: "4px", borderRadius: "50%",
           background: subColor || "#4ade80",
           boxShadow: `0 0 6px ${subColor || "#4ade80"}`,
         }} />

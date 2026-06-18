@@ -34,10 +34,11 @@ const ServiceCard = ({ name, status, cpu, memory, latency, index }) => {
       transition={{ delay: index * 0.08, duration: 0.6 }}
       whileHover={{ scale: 1.01 }}
       style={{
-        background: "rgba(8,8,18,0.85)",
-        border: "1px solid rgba(255,255,255,0.05)",
-        borderRadius: "14px",
-        padding: "18px 20px",
+      background: `linear-gradient(135deg, rgba(8,8,18,0.9), rgba(8,8,18,0.7))`,
+      border: `1px solid ${s.border}`,
+      borderRadius: "14px",
+      padding: "18px 20px",
+      boxShadow: `0 4px 24px ${s.glow}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
