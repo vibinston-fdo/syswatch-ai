@@ -15,7 +15,11 @@ DATABASE_URL = os.getenv(
 )
 
 # This creates the actual connection to MySQL
-engine = create_engine(DATABASE_URL)
+connect_args = {}
+if "aivencloud.com" in DATABASE_URL:
+    connect_args = {"ssl": {"fake_flag_to_enable_tls": True}}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 # SessionLocal is used to run queries on the database
 # Every API request gets its own fresh session
