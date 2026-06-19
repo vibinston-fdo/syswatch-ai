@@ -51,7 +51,7 @@ app.include_router(alerts.router,   prefix="/api/alerts",   tags=["Alerts"])
 async def root():
     return {
         "message": "SysWatch AI is running! 🚀",
-        "docs": "Visit http://localhost:8000/docs to see all APIs"
+        "docs": "Visit https://syswatch-ai-backend-25j3.onrender.com/docs to see all APIs"
     }
 from fastapi import WebSocket
 import asyncio

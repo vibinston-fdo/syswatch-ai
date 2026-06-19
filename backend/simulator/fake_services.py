@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ─── BACKEND URL ──────────────────────────────────────────────
 import os
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+BASE_URL = os.getenv("BASE_URL", "https://syswatch-ai-backend-25j3.onrender.com")
 
 # ─── 5 FAKE SERVICES ──────────────────────────────────────────
 # Each service has:

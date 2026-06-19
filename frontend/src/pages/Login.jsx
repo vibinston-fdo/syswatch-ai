@@ -15,7 +15,7 @@ const Login = () => {
     if (!email || !password) { setError("Please fill in all fields"); return; }
     setLoading(true); setError("");
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/login", { email, password });
+      const res = await axios.post("https://syswatch-ai-backend-25j3.onrender.com/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.access_token);
       navigate("/dashboard");
     } catch (err) {

@@ -72,8 +72,8 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const [servicesRes, alertsRes] = await Promise.all([
-        axios.get("http://localhost:8000/api/services/metrics/latest"),
-        axios.get("http://localhost:8000/api/alerts/active"),
+        axios.get("https://syswatch-ai-backend-25j3.onrender.com/api/services/metrics/latest"),
+        axios.get("https://syswatch-ai-backend-25j3.onrender.com/api/alerts/active"),
       ]);
       setServices(servicesRes.data);
       setAlerts(alertsRes.data.slice(0, 4));
@@ -98,7 +98,7 @@ const Dashboard = () => {
 
   const handleResolve = async (alertId) => {
     try {
-      await axios.put(`http://localhost:8000/api/alerts/resolve/${alertId}`);
+      await axios.put(`https://syswatch-ai-backend-25j3.onrender.com/api/alerts/resolve/${alertId}`);
       fetchData();
     } catch (err) {
       console.error(err);

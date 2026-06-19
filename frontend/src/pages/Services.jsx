@@ -35,7 +35,7 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/services/metrics/latest");
+      const res = await axios.get("https://syswatch-ai-backend-25j3.onrender.com/api/services/metrics/latest");
       setServices(res.data);
     } catch (err) {
       console.error(err);
@@ -45,7 +45,7 @@ const Services = () => {
 
   const fetchHistory = async (serviceName) => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/services/metrics/history/${serviceName}`);
+      const res = await axios.get(`https://syswatch-ai-backend-25j3.onrender.com/api/services/metrics/history/${serviceName}`);
       setHistory(res.data);
     } catch (err) {
       console.error(err);
