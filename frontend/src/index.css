@@ -101,3 +101,30 @@ body {
   animation: blink 1s infinite;
   vertical-align: middle;
 }
+@media (max-width: 768px) {
+
+  /* Hide login left panel on mobile */
+  .login-left {
+    display: none !important;
+  }
+
+  /* Stack metric cards */
+  .metric-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Stack service + alert panels */
+  .two-col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Navbar mobile */
+  .nav-items {
+    display: none !important;
+  }
+
+  /* Charts full width */
+  .chart-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
