@@ -1,8 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
+import { useTheme } from "../context/ThemeContext";
 
-const Navbar = ({ alertCount }) => {
+  const Navbar = ({ alertCount }) => {
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -79,6 +82,7 @@ const Navbar = ({ alertCount }) => {
             height: "28px",
             borderRadius: "7px",
             background: "linear-gradient(135deg, #7c3aed, #6366f1)",
+            boxShadow: "0 0 24px rgba(124,58,237,0.35)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -124,10 +128,8 @@ const Navbar = ({ alertCount }) => {
                 padding: "6px 14px",
                 borderRadius: "8px",
                 border: "none",
-                background: isActive
-                  ? "rgba(124,58,237,0.15)"
-                  : "transparent",
-                color: isActive ? "#a78bfa" : "#334155",
+                background: isActive ? theme.badge : "transparent",
+                color: isActive ? theme.accent : "#334155",
                 fontSize: "13px",
                 fontWeight: isActive ? "600" : "400",
                 cursor: "pointer",
@@ -175,7 +177,7 @@ const Navbar = ({ alertCount }) => {
 
       {/* Right side */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-
+        <ThemeSwitcher />    {/* ← add this */}
         {/* Live clock */}
         <div style={{
           fontSize: "11px",

@@ -11,7 +11,7 @@ const Alerts = () => {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get("https://syswatch-ai-backend-25j3.onrender.com/api/alerts/");
+      const res = await axios.get("http://localhost:8000/api/alerts/");
       setAlerts(res.data);
     } catch (err) {
       console.error(err);
@@ -21,7 +21,7 @@ const Alerts = () => {
 
   const handleResolve = async (alertId) => {
     try {
-        await axios.put(`https://syswatch-ai-backend-25j3.onrender.com/api/alerts/resolve/${alertId}`);
+        await axios.put(`http://localhost:8000/api/alerts/resolve/${alertId}`);
         fetchAlerts();
     } catch (err) {
         console.error(err);
