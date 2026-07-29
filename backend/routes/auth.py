@@ -91,10 +91,13 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 async def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.email).first()
+    # Check if the input matches an email OR a username
+    db_user = db.query(User).filter(
+        (User.email == user.email) | (User.username == user.email)
+    ).first()
 
     if not db_user or not verify_password(user.password, db_user.password):
-        raise HTTPException(status_code=401, detail="Wrong email or password!")
+        raise HTTPException(status_code=401, detail="Wrong email/username or password!")
 
     token = create_token(db_user.email)
     return {"access_token": token, "token_type": "bearer"}

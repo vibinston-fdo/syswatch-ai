@@ -345,15 +345,15 @@ const Login = () => {
                 color: focused === "email" ? "#a78bfa" : "#334155",
                 display: "block", marginBottom: "8px",
                 letterSpacing: "1px", transition: "color 0.2s",
-              }}>EMAIL ADDRESS</label>
+              }}>EMAIL OR USERNAME</label>
               <input
-                type="email"
+                type="text"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onFocus={() => setFocused("email")}
                 onBlur={() => setFocused("")}
                 onKeyDown={e => e.key === "Enter" && handleLogin()}
-                placeholder="name@company.com"
+                placeholder="name@company.com or username"
                 style={{
                   width: "100%", padding: "12px 16px",
                   background: focused === "email"
