@@ -9,6 +9,14 @@ const Sidebar = ({ alertCount }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [time, setTime] = useState(new Date());
   const [autoPilot, setAutoPilot] = useState(localStorage.getItem("autoPilot") === "true");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const toggleAutoPilot = () => {
     const newState = !autoPilot;
@@ -35,13 +43,60 @@ const Sidebar = ({ alertCount }) => {
     navigate("/login");
   };
 
-  const sidebarWidth = collapsed ? "72px" : "240px";
+  const sidebarWidth = isMobile ? "280px" : (collapsed ? "72px" : "240px");
+  const sidebarX = isMobile ? (mobileOpen ? 0 : -300) : 0;
 
   return (
-    <motion.aside
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1, width: sidebarWidth }}
-      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+    <>
+      {/* Mobile Toggle Button */}
+      {isMobile && (
+        <motion.button
+          onClick={() => setMobileOpen(true)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            zIndex: 90,
+            width: "44px",
+            height: "44px",
+            borderRadius: "12px",
+            background: "rgba(124,58,237,0.15)",
+            border: "1px solid rgba(124,58,237,0.3)",
+            color: "#a78bfa",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 0 15px rgba(124,58,237,0.2)"
+          }}
+        >
+          <LayoutDashboard size={20} />
+        </motion.button>
+      )}
+
+      {/* Mobile Overlay */}
+      {isMobile && mobileOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setMobileOpen(false)}
+          style={{
+            position: "fixed", inset: 0,
+            background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)",
+            zIndex: 95
+          }}
+        />
+      )}
+
+      <motion.aside
+        initial={{ x: -300, opacity: 0 }}
+        animate={{ x: sidebarX, opacity: 1, width: sidebarWidth }}
+        transition={{ type: "spring", bounce: 0, duration: 0.4 }}
       style={{
         height: "100vh",
         background: "rgba(3,3,8,0.85)",
@@ -98,7 +153,10 @@ const Sidebar = ({ alertCount }) => {
               key={item.path}
               whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.03)" }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                navigate(item.path);
+                if (isMobile) setMobileOpen(false);
+              }}
               style={{
                 display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start",
                 gap: "12px", padding: "10px", borderRadius: "10px", border: "1px solid transparent",
@@ -182,21 +240,24 @@ const Sidebar = ({ alertCount }) => {
           </motion.button>
         </div>
 
-        {/* Collapse toggle */}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            position: "absolute", right: "-12px", top: "40px",
-            width: "24px", height: "24px", borderRadius: "50%",
-            background: "#1e293b", border: "1px solid rgba(255,255,255,0.1)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#94a3b8", cursor: "pointer", zIndex: 10
-          }}
-        >
-          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-        </button>
+        {/* Collapse toggle (Desktop only) */}
+        {!isMobile && (
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              position: "absolute", right: "-12px", top: "40px",
+              width: "24px", height: "24px", borderRadius: "50%",
+              background: "#1e293b", border: "1px solid rgba(255,255,255,0.1)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#94a3b8", cursor: "pointer", zIndex: 10
+            }}
+          >
+            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          </button>
+        )}
       </div>
     </motion.aside>
+    </>
   );
 };
 
