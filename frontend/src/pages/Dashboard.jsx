@@ -114,6 +114,13 @@ const Dashboard = () => {
   const healthScore = Math.max(0, 100 - (activeAlerts * 15) - (avgCpu > 80 ? 10 : 0));
   const healthColor = healthScore > 90 ? "#4ade80" : healthScore > 70 ? "#fbbf24" : "#f87171";
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
       <NetworkBackground />
@@ -135,7 +142,7 @@ const Dashboard = () => {
       <div className={`main-content ${sidebarCollapsed ? 'collapsed' : ''}`} style={{ position: "relative", zIndex: 1, padding: "32px 40px" }}>
         
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: "40px", display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "flex-end", gap: isMobile ? "24px" : "0" }}>
           <div>
             <div className="font-sans" style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
               <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", letterSpacing: "1px" }}>PLATFORM / </span>
@@ -143,18 +150,18 @@ const Dashboard = () => {
             </div>
 
             <h1 style={{
-              fontSize: "36px", fontWeight: "700", letterSpacing: "-1.5px", margin: "0 0 8px",
+              fontSize: isMobile ? "28px" : "36px", fontWeight: "700", letterSpacing: "-1.5px", margin: "0 0 8px",
               color: "#f8fafc", display: "flex", alignItems: "center"
             }}>
               {displayed}{!done && <span className="cursor" />}
             </h1>
-            <p className="font-sans" style={{ fontSize: "14px", color: "#94a3b8", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+            <p className="font-sans" style={{ fontSize: isMobile ? "12px" : "14px", color: "#94a3b8", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
               Monitoring {totalServices} nodes <span style={{ color: "#334155" }}>|</span> {activeAlerts > 0 ? <span style={{ color: "#f87171" }}>{activeAlerts} anomalies detected</span> : <span style={{ color: "#4ade80" }}>Neural mesh nominal</span>}
             </p>
           </div>
           
           {/* Executive Health Score */}
-          <div style={{ textAlign: "right" }}>
+          <div style={{ textAlign: isMobile ? "left" : "right" }}>
             <div className="font-sans" style={{ fontSize: "11px", color: "#64748b", fontWeight: "600", letterSpacing: "1px", marginBottom: "4px" }}>SYSTEM HEALTH</div>
             <div className="font-mono" style={{ fontSize: "32px", fontWeight: "700", color: healthColor, textShadow: `0 0 15px ${healthColor}40` }}>
               {healthScore}<span style={{ fontSize: "18px", color: "#475569" }}>/100</span>
@@ -163,17 +170,17 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Metrics Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", marginBottom: "32px" }}>
-          <MetricCard index={0} label="ACTIVE NODES" value={totalServices || "—"} sub={`${healthyServices} healthy`} subColor="#4ade80" icon="◈" glowColor="rgba(14,165,233,0.2)" />
-          <MetricCard index={1} label="MESH AVG CPU" value={`${avgCpu}%`} sub={avgCpu > 70 ? "High load" : "Normal range"} subColor={avgCpu > 70 ? "#fbbf24" : "#4ade80"} icon="◎" glowColor="rgba(139,92,246,0.2)" />
-          <MetricCard index={2} label="ACTIVE THREATS" value={activeAlerts || "0"} sub={activeAlerts > 0 ? "Action needed" : "All clear"} subColor={activeAlerts > 0 ? "#f87171" : "#4ade80"} icon="⊗" glowColor="rgba(239,68,68,0.2)" />
-          <MetricCard index={3} label="UPTIME" value="99.9%" sub="Last 30 days" subColor="#4ade80" icon="◇" glowColor="rgba(74,222,128,0.2)" />
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: "16px", marginBottom: "32px" }}>
+          <MetricCard index={0} label="ACTIVE NODES" value={totalServices || "—"} sub={`${healthyServices} healthy`} subColor="#4ade80" icon="◈" glowColor="rgba(14,165,233,0.2)" isMobile={isMobile} />
+          <MetricCard index={1} label="MESH AVG CPU" value={`${avgCpu}%`} sub={avgCpu > 70 ? "High load" : "Normal range"} subColor={avgCpu > 70 ? "#fbbf24" : "#4ade80"} icon="◎" glowColor="rgba(139,92,246,0.2)" isMobile={isMobile} />
+          <MetricCard index={2} label="ACTIVE THREATS" value={activeAlerts || "0"} sub={activeAlerts > 0 ? "Action needed" : "All clear"} subColor={activeAlerts > 0 ? "#f87171" : "#4ade80"} icon="⊗" glowColor="rgba(239,68,68,0.2)" isMobile={isMobile} />
+          <MetricCard index={3} label="UPTIME" value="99.9%" sub="Last 30 days" subColor="#4ade80" icon="◇" glowColor="rgba(74,222,128,0.2)" isMobile={isMobile} />
         </div>
 
         {/* Main Content Panels */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "24px", marginBottom: "24px" }}>
           
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-panel" style={{ padding: "24px" }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-panel" style={{ padding: "24px", overflow: "hidden" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <div className="font-sans" style={{ fontSize: "14px", fontWeight: "600", color: "#f8fafc" }}>Service Topology</div>
             </div>

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => {
+const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index, isMobile }) => {
 
   return (
     <motion.div
@@ -11,7 +11,7 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
       style={{
         background: "rgba(8,8,18,0.85)",
         borderRadius: "16px",
-        padding: "24px",
+        padding: isMobile ? "16px" : "24px",
         position: "relative",
         overflow: "hidden",
         cursor: "default",
@@ -58,21 +58,27 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: index * 0.1 + 0.2, type: "spring", bounce: 0.4 }}
         style={{
-          fontSize: "32px",
+          fontSize: isMobile ? "24px" : "32px",
           fontWeight: "700",
           color: "#f8fafc",
           letterSpacing: "-1.5px",
           lineHeight: 1,
           marginBottom: "8px",
           fontFamily: "'Inter', system-ui, sans-serif",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis"
         }}
       >{value}</motion.div>
 
       {/* Label */}
       <div style={{
-        fontSize: "11px", color: "#334155",
+        fontSize: isMobile ? "9px" : "11px", color: "#334155",
         letterSpacing: "1px", marginBottom: "6px",
         fontFamily: "'Inter', system-ui, sans-serif",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis"
       }}>{label}</div>
 
       {/* Sub */}
@@ -81,11 +87,14 @@ const MetricCard = ({ label, value, sub, subColor, icon, glowColor, index }) => 
         animate={{ opacity: 1 }}
         transition={{ delay: index * 0.1 + 0.5 }}
         style={{
-          fontSize: "11px",
+          fontSize: isMobile ? "9px" : "11px",
           color: subColor || "#4ade80",
           fontWeight: "500",
           fontFamily: "'Inter', system-ui, sans-serif",
           display: "flex", alignItems: "center", gap: "4px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis"
         }}
       >
         <div style={{

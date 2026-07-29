@@ -12,19 +12,22 @@ const SystemTopology = ({ services }) => {
     if (!services || services.length === 0) return;
     
     const updateLayout = () => {
-      const width = canvasRef.current?.offsetWidth || 600;
+      const width = canvasRef.current?.offsetWidth || window.innerWidth - 80;
       const height = canvasRef.current?.offsetHeight || 300;
       setDimensions({ width, height });
 
-      const padding = 50;
+      const isMobile = window.innerWidth <= 768;
+      const padding = isMobile ? 30 : 50;
       const numNodes = services.length;
+      
       nodesRef.current = services.map((service, i) => {
         // Circle layout
         const angle = (i / numNodes) * 2 * Math.PI - Math.PI / 2;
-        const radius = Math.min(width, height) / 2 - padding;
-        const x = width / 2 + Math.cos(angle) * radius;
-        const y = height / 2 + Math.sin(angle) * radius;
-        return { ...service, x, y, radius: 28 }; // Slightly larger radius
+        // Ensure radius is strictly bound so nodes fit in small screens
+        const layoutRadius = Math.max(30, Math.min(width, height) / 2 - padding);
+        const x = width / 2 + Math.cos(angle) * layoutRadius;
+        const y = height / 2 + Math.sin(angle) * layoutRadius;
+        return { ...service, x, y, radius: isMobile ? 24 : 28 };
       });
     };
 
@@ -80,9 +83,12 @@ const SystemTopology = ({ services }) => {
             const px = n1.x + (n2.x - n1.x) * progress;
             const py = n1.y + (n2.y - n1.y) * progress;
             ctx.beginPath();
-            ctx.arc(px, py, 2, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(14, 165, 233, 0.8)';
+            ctx.arc(px, py, 2.5, 0, Math.PI * 2); // slightly larger dot
+            ctx.fillStyle = 'rgba(14, 165, 233, 0.9)'; // more opaque dot
             ctx.fill();
+            ctx.shadowColor = 'rgba(14, 165, 233, 0.8)';
+            ctx.shadowBlur = 4;
+            ctx.shadowBlur = 0; // reset
           }
         }
       }
@@ -151,7 +157,7 @@ const SystemTopology = ({ services }) => {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ position: 'relative', width: '100%', height: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {services.length === 0 ? (
         <div className="font-mono" style={{ color: "#64748b", fontSize: "12px" }}>Establishing topology...</div>
       ) : (
