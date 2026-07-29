@@ -10,21 +10,27 @@ const SystemTopology = ({ services }) => {
   // Generate deterministic positions for nodes based on their index
   useEffect(() => {
     if (!services || services.length === 0) return;
-    const padding = 60;
-    const width = canvasRef.current?.offsetWidth || 600;
-    const height = 300;
     
-    setDimensions({ width, height });
+    const updateLayout = () => {
+      const width = canvasRef.current?.offsetWidth || 600;
+      const height = canvasRef.current?.offsetHeight || 300;
+      setDimensions({ width, height });
 
-    const numNodes = services.length;
-    nodesRef.current = services.map((service, i) => {
-      // Circle layout
-      const angle = (i / numNodes) * 2 * Math.PI - Math.PI / 2;
-      const radius = Math.min(width, height) / 2 - padding;
-      const x = width / 2 + Math.cos(angle) * radius;
-      const y = height / 2 + Math.sin(angle) * radius;
-      return { ...service, x, y, radius: 25 };
-    });
+      const padding = 50;
+      const numNodes = services.length;
+      nodesRef.current = services.map((service, i) => {
+        // Circle layout
+        const angle = (i / numNodes) * 2 * Math.PI - Math.PI / 2;
+        const radius = Math.min(width, height) / 2 - padding;
+        const x = width / 2 + Math.cos(angle) * radius;
+        const y = height / 2 + Math.sin(angle) * radius;
+        return { ...service, x, y, radius: 28 }; // Slightly larger radius
+      });
+    };
+
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+    return () => window.removeEventListener('resize', updateLayout);
   }, [services]);
 
   useEffect(() => {
@@ -97,19 +103,33 @@ const SystemTopology = ({ services }) => {
         // Node circle
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = isHovered ? baseColor : 'rgba(15, 23, 42, 0.9)';
+        ctx.fillStyle = isHovered ? baseColor : 'rgba(10, 15, 30, 0.95)';
         ctx.strokeStyle = baseColor;
         ctx.lineWidth = isHovered ? 2 : 1.5;
         ctx.fill();
         ctx.stroke();
 
-        // Node Label
-        ctx.font = '500 11px Space Grotesk';
+        // Node Label (Short Name)
+        ctx.font = '600 11px JetBrains Mono';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = isHovered ? '#000' : '#f8fafc';
-        const shortName = node.service_name.replace(' Service', '');
-        ctx.fillText(shortName, node.x, node.y);
+        const shortName = node.service_name.substring(0, 3).toUpperCase();
+        
+        // If critical/warning, draw notification INSIDE the circle instead of text
+        if (isCritical || node.status === 'warning') {
+          ctx.fillStyle = isHovered ? '#000' : baseColor;
+          ctx.font = 'bold 16px sans-serif';
+          ctx.fillText('!', node.x, node.y + 1);
+          
+          // Pulsing inner dot for extra hacker effect
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 4 + Math.sin(phase * 4) * 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${isCritical ? '239,68,68' : '251,191,36'}, ${0.3 + Math.sin(phase*2)*0.2})`;
+          ctx.fill();
+        } else {
+          ctx.fillText(shortName, node.x, node.y + 1);
+        }
       });
 
       animId = requestAnimationFrame(draw);

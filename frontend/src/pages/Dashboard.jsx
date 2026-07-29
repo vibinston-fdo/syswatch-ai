@@ -111,6 +111,8 @@ const Dashboard = () => {
   const healthyServices = services.filter(s => s.status === "healthy").length;
   const avgCpu = services.length ? (services.reduce((a, b) => a + b.cpu, 0) / services.length).toFixed(1) : 0;
   const activeAlerts = alerts.length;
+  const healthScore = Math.max(0, 100 - (activeAlerts * 15) - (avgCpu > 80 ? 10 : 0));
+  const healthColor = healthScore > 90 ? "#4ade80" : healthScore > 70 ? "#fbbf24" : "#f87171";
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
@@ -133,21 +135,31 @@ const Dashboard = () => {
       <div className={`main-content ${sidebarCollapsed ? 'collapsed' : ''}`} style={{ position: "relative", zIndex: 1, padding: "32px 40px" }}>
         
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: "40px" }}>
-          <div className="font-sans" style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-            <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", letterSpacing: "1px" }}>PLATFORM / </span>
-            <span style={{ fontSize: "12px", color: "#0ea5e9", fontWeight: "600", letterSpacing: "1px" }}>DASHBOARD</span>
-          </div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+          <div>
+            <div className="font-sans" style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+              <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600", letterSpacing: "1px" }}>PLATFORM / </span>
+              <span style={{ fontSize: "12px", color: "#0ea5e9", fontWeight: "600", letterSpacing: "1px" }}>DASHBOARD</span>
+            </div>
 
-          <h1 style={{
-            fontSize: "36px", fontWeight: "700", letterSpacing: "-1.5px", margin: "0 0 8px",
-            color: "#f8fafc", display: "flex", alignItems: "center"
-          }}>
-            {displayed}{!done && <span className="cursor" />}
-          </h1>
-          <p className="font-sans" style={{ fontSize: "14px", color: "#94a3b8", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
-            Monitoring {totalServices} nodes <span style={{ color: "#334155" }}>|</span> {activeAlerts > 0 ? <span style={{ color: "#f87171" }}>{activeAlerts} anomalies detected</span> : <span style={{ color: "#4ade80" }}>Neural mesh nominal</span>}
-          </p>
+            <h1 style={{
+              fontSize: "36px", fontWeight: "700", letterSpacing: "-1.5px", margin: "0 0 8px",
+              color: "#f8fafc", display: "flex", alignItems: "center"
+            }}>
+              {displayed}{!done && <span className="cursor" />}
+            </h1>
+            <p className="font-sans" style={{ fontSize: "14px", color: "#94a3b8", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+              Monitoring {totalServices} nodes <span style={{ color: "#334155" }}>|</span> {activeAlerts > 0 ? <span style={{ color: "#f87171" }}>{activeAlerts} anomalies detected</span> : <span style={{ color: "#4ade80" }}>Neural mesh nominal</span>}
+            </p>
+          </div>
+          
+          {/* Executive Health Score */}
+          <div style={{ textAlign: "right" }}>
+            <div className="font-sans" style={{ fontSize: "11px", color: "#64748b", fontWeight: "600", letterSpacing: "1px", marginBottom: "4px" }}>SYSTEM HEALTH</div>
+            <div className="font-mono" style={{ fontSize: "32px", fontWeight: "700", color: healthColor, textShadow: `0 0 15px ${healthColor}40` }}>
+              {healthScore}<span style={{ fontSize: "18px", color: "#475569" }}>/100</span>
+            </div>
+          </div>
         </motion.div>
 
         {/* Metrics Grid */}

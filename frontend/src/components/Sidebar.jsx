@@ -111,22 +111,27 @@ const Sidebar = ({ alertCount }) => {
               }}
               title={collapsed ? item.label : ""}
             >
-              <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+              <div style={{ position: "relative" }}>
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                {item.label === "Alerts" && alertCount > 0 && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "-4px", right: "-4px",
+                      width: "14px", height: "14px",
+                      background: "#ef4444",
+                      color: "#fff", fontSize: "9px",
+                      borderRadius: "50%", fontWeight: "800",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      boxShadow: "0 0 10px rgba(239,68,68,0.5)"
+                    }}
+                  >
+                    {alertCount}
+                  </div>
+                )}
+              </div>
               {!collapsed && <span>{item.label}</span>}
-              {item.label === "Alerts" && alertCount > 0 && (
-                <div
-                  style={{
-                    position: collapsed ? "absolute" : "relative",
-                    top: collapsed ? "4px" : "auto", right: collapsed ? "4px" : "auto",
-                    marginLeft: collapsed ? "0" : "auto",
-                    background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)",
-                    color: "#f87171", fontSize: "10px", padding: "2px 6px",
-                    borderRadius: "10px", fontWeight: "700"
-                  }}
-                >
-                  {alertCount}
-                </div>
-              )}
+
             </motion.button>
           );
         })}
