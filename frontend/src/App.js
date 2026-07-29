@@ -9,6 +9,7 @@ import Analytics from './pages/Analytics';
 import Register from './pages/Register';
 import SplashScreen from './components/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
+import CommandPalette from './components/CommandPalette';
 
 const isLoggedIn = () => localStorage.getItem('token') !== null;
 
@@ -62,6 +63,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <CommandPalette />
       <AnimatedRoutes />
     </Router>
   );

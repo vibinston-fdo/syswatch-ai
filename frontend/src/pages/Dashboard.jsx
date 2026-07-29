@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import api from "../api";
 import Sidebar from "../components/Sidebar";
 import MetricCard from "../components/MetricCard";
-import ServiceCard from "../components/ServiceCard";
 import AlertItem from "../components/AlertItem";
 import LiveChart from "../components/LiveChart";
 import NetworkBackground from "../components/NetworkBackground";
 import TerminalLog from "../components/TerminalLog";
+import SystemTopology from "../components/SystemTopology";
 
 const useTypewriter = (text, speed = 80) => {
   const [displayed, setDisplayed] = useState("");
@@ -166,11 +166,7 @@ const Dashboard = () => {
               <div className="font-sans" style={{ fontSize: "14px", fontWeight: "600", color: "#f8fafc" }}>Service Topology</div>
             </div>
             {loading ? <div className="font-mono" style={{ color: "#64748b", fontSize: "12px", padding: "20px" }}>Loading topology...</div> : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {services.map((service, i) => (
-                  <ServiceCard key={service.service_id} index={i} name={service.service_name} status={service.status} cpu={service.cpu} memory={service.memory} latency={service.latency} />
-                ))}
-              </div>
+              <SystemTopology services={services} />
             )}
           </motion.div>
 

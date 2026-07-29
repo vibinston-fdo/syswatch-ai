@@ -1,7 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import ThemeSwitcher from "./ThemeSwitcher";
 import { LayoutDashboard, Activity, AlertTriangle, BarChart3, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 
 const Sidebar = ({ alertCount }) => {
@@ -162,8 +161,7 @@ const Sidebar = ({ alertCount }) => {
           </div>
         )}
         
-        <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", gap: "8px" }}>
-           {!collapsed && <ThemeSwitcher />}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-end", gap: "8px" }}>
            <motion.button
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             onClick={handleLogout}
