@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import api from "../api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ const Login = () => {
     if (!email || !password) { setError("Please fill in all fields"); return; }
     setLoading(true); setError("");
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
+      const res = await api.post("/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.access_token);
       navigate("/dashboard");
     } catch (err) {

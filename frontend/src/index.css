@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
   box-sizing: border-box;
@@ -8,24 +8,30 @@
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #030308;
+  background: #06060c; /* Slightly deeper background for more contrast */
   color: #f8fafc;
   overflow-x: hidden;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030308;
+  background: rgba(255, 255, 255, 0.02);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e1b4b;
+  background: rgba(124, 58, 237, 0.3);
   border-radius: 100px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4c1d95;
+  background: rgba(124, 58, 237, 0.6);
+}
+
+/* Typography Utilities */
+.font-mono {
+  font-family: 'Fira Code', monospace;
 }
 
 /* 3D Tilt effect on cards */
@@ -33,20 +39,20 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .tilt-card:hover {
-  transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.02);
-  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.15);
+  transform: perspective(1000px) rotateX(1deg) rotateY(1deg) scale(1.01);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.1);
 }
 
 /* Glow pulse animation */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(124,58,237,0.3); }
-  50% { box-shadow: 0 0 40px rgba(124,58,237,0.6); }
+  0%, 100% { box-shadow: 0 0 15px rgba(124,58,237,0.2); }
+  50% { box-shadow: 0 0 30px rgba(124,58,237,0.4); }
 }
 
 /* Float animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
 }
 
 /* Shimmer animation */
@@ -64,27 +70,38 @@ body {
   animation: shimmer 4s linear infinite;
 }
 
+/* Glassmorphism Panel - Refined */
+.glass-panel {
+  background: rgba(10, 10, 16, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
 /* Page transition */
 .page-enter {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(15px);
 }
 .page-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Neon border effect */
+/* Neon border effect - Thinner and more elegant */
 .neon-border {
-  border: 1px solid rgba(124,58,237,0.3);
-  box-shadow: 0 0 20px rgba(124,58,237,0.1),
-              inset 0 0 20px rgba(124,58,237,0.05);
+  border: 1px solid rgba(124,58,237,0.2);
+  box-shadow: 0 0 15px rgba(124,58,237,0.05),
+              inset 0 0 15px rgba(124,58,237,0.02);
+  transition: all 0.3s ease;
 }
 .neon-border:hover {
-  border-color: rgba(124,58,237,0.6);
-  box-shadow: 0 0 30px rgba(124,58,237,0.2),
-              inset 0 0 30px rgba(124,58,237,0.1);
+  border-color: rgba(124,58,237,0.4);
+  box-shadow: 0 0 25px rgba(124,58,237,0.1),
+              inset 0 0 25px rgba(124,58,237,0.05);
 }
 
 /* Typewriter cursor */
@@ -94,14 +111,29 @@ body {
 }
 .cursor {
   display: inline-block;
-  width: 3px;
+  width: 2px;
   height: 1em;
   background: #a78bfa;
   margin-left: 4px;
   animation: blink 1s infinite;
   vertical-align: middle;
 }
+
+/* Layout padding adjustment for Sidebar */
+.main-content {
+  margin-left: 240px; /* Sidebar width */
+  transition: margin-left 0.4s ease;
+}
+
+.main-content.collapsed {
+  margin-left: 72px; /* Collapsed sidebar width */
+}
+
 @media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding-bottom: 80px; /* Bottom nav spacing */
+  }
 
   /* Hide login left panel on mobile */
   .login-left {
@@ -116,11 +148,6 @@ body {
   /* Stack service + alert panels */
   .two-col {
     grid-template-columns: 1fr !important;
-  }
-
-  /* Navbar mobile */
-  .nav-items {
-    display: none !important;
   }
 
   /* Charts full width */

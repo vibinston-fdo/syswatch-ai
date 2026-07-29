@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import api from "../api";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -32,7 +32,7 @@ const Register = () => {
     }
     setLoading(true); setError("");
     try {
-      await axios.post("/api/auth/register", {
+      await api.post("/api/auth/register", {
         username: form.username,
         email: form.email,
         password: form.password,
