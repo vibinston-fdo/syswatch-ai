@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import api from "../api";
 import Navbar from "../components/Navbar";
 
 const Alerts = () => {
@@ -11,8 +11,13 @@ const Alerts = () => {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get("/api/alerts/");
-      setAlerts(res.data);
+      const res = await api.get("/api/alerts");
+      // Ensure it's always an array in case of unexpected string response
+      if (Array.isArray(res.data)) {
+        setAlerts(res.data);
+      } else {
+        setAlerts([]);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -21,7 +26,7 @@ const Alerts = () => {
 
   const handleResolve = async (alertId) => {
     try {
-        await axios.put(`/api/alerts/resolve/${alertId}`);
+        await api.put(`/api/alerts/resolve/${alertId}`);
         fetchAlerts();
     } catch (err) {
         console.error(err);
