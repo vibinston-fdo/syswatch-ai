@@ -35,6 +35,13 @@ const Analytics = () => {
   const [stats, setStats] = useState(null);
   const [services, setServices] = useState([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -79,7 +86,7 @@ const Analytics = () => {
 
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
-      <div className={`main-content ${sidebarCollapsed ? 'collapsed' : ''}`} style={{ position: "relative", zIndex: 1, padding: "32px 40px" }}>
+      <div className={`main-content ${sidebarCollapsed ? 'collapsed' : ''}`} style={{ position: "relative", zIndex: 1, padding: isMobile ? "24px 16px" : "32px 40px" }}>
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: "40px" }}>
@@ -92,7 +99,7 @@ const Analytics = () => {
         </motion.div>
 
         {/* Stats Row */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "28px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? "12px" : "16px", marginBottom: "28px" }}>
           {[
             { label: "TOTAL ALERTS", value: stats?.total_alerts || 0, color: "#818cf8", sub: "All time" },
             { label: "ACTIVE NOW", value: stats?.active_alerts || 0, color: "#f87171", sub: "Needs attention" },
@@ -109,7 +116,7 @@ const Analytics = () => {
         </div>
 
         {/* Charts Row 1 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
           <ChartPanel title="CPU usage by service (%)" accentColor="#818cf8" delay={0.2}>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={serviceChartData} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
@@ -148,7 +155,7 @@ const Analytics = () => {
         </div>
 
         {/* Charts Row 2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "20px" }}>
           <ChartPanel title="Latency by service (ms)" accentColor="#38bdf8" delay={0.4}>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={serviceChartData} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>

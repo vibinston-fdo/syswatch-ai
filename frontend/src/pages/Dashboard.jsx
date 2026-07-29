@@ -218,7 +218,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "24px" }}>
           <LiveChart index={0} title="CPU usage by service" data={cpuHistory} dataKey="cpu" color="#0ea5e9" unit="%" type="area" />
           <LiveChart index={1} title="Memory usage by service" data={memHistory} dataKey="memory" color="#8b5cf6" unit="MB" type="area" />
         </div>
