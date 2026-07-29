@@ -109,7 +109,9 @@ const Sidebar = ({ alertCount }) => {
         display: "flex",
         flexDirection: "column",
         fontFamily: "'Inter', system-ui, sans-serif",
-        padding: "24px 16px",
+        padding: "24px 16px 32px 16px",
+        overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       {/* Header / Logo */}
@@ -196,7 +198,7 @@ const Sidebar = ({ alertCount }) => {
       </div>
 
       {/* Footer / Status */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "auto" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "auto", paddingTop: "24px" }}>
         {!collapsed && (
           <div style={{ padding: "12px", background: "rgba(34,197,94,0.06)", borderRadius: "12px", border: "1px solid rgba(34,197,94,0.15)", display: "flex", alignItems: "center", gap: "10px" }}>
             <motion.div

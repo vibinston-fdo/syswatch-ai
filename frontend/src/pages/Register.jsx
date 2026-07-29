@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api";
@@ -15,7 +15,14 @@ const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -57,7 +64,9 @@ const Register = () => {
     <div style={{
       minHeight: "100vh",
       display: "flex",
+      flexDirection: isMobile ? "column" : "row",
       position: "relative",
+      overflowX: "hidden",
     }}>
       <NetworkBackground />
 
@@ -71,10 +80,11 @@ const Register = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "44px 64px",
+          padding: isMobile ? "32px 24px" : "44px 64px",
           position: "relative",
           zIndex: 1,
-          borderRight: "1px solid rgba(255,255,255,0.03)",
+          borderRight: isMobile ? "none" : "1px solid rgba(255,255,255,0.03)",
+          borderBottom: isMobile ? "1px solid rgba(255,255,255,0.03)" : "none",
         }}
       >
         {/* Logo */}
@@ -208,9 +218,9 @@ const Register = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
-          width: "500px",
+          width: isMobile ? "100%" : "500px",
           display: "flex", alignItems: "center",
-          justifyContent: "center", padding: "44px",
+          justifyContent: "center", padding: isMobile ? "32px 24px" : "44px",
           position: "relative", zIndex: 1,
         }}
       >
