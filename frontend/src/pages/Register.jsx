@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api";
+import NetworkBackground from "../components/NetworkBackground";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -55,66 +56,10 @@ const Register = () => {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#030308",
       display: "flex",
-      fontFamily: "'Inter', system-ui, sans-serif",
-      overflow: "hidden",
       position: "relative",
     }}>
-
-      {/* Background glows */}
-      <div style={{
-        position: "fixed",
-        top: "-30%", left: "-20%",
-        width: "80vw", height: "80vh",
-        borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, rgba(99,102,241,0.08) 40%, transparent 70%)",
-        pointerEvents: "none",
-        filter: "blur(40px)", zIndex: 0,
-      }} />
-      <div style={{
-        position: "fixed",
-        bottom: "-20%", right: "-10%",
-        width: "70vw", height: "70vh",
-        borderRadius: "50%",
-        background: "radial-gradient(ellipse, rgba(6,182,212,0.12) 0%, rgba(59,130,246,0.06) 40%, transparent 70%)",
-        pointerEvents: "none",
-        filter: "blur(50px)", zIndex: 0,
-      }} />
-
-      {/* Grid */}
-      <div style={{
-        position: "fixed", inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)
-        `,
-        backgroundSize: "72px 72px",
-        pointerEvents: "none", zIndex: 0,
-      }} />
-
-      {/* Floating orbs */}
-      {[
-        { top: "15%", left: "20%", size: 4, color: "rgba(139,92,246,0.5)", dur: 7 },
-        { top: "70%", left: "10%", size: 3, color: "rgba(6,182,212,0.4)", dur: 9 },
-        { top: "80%", left: "60%", size: 3, color: "rgba(99,102,241,0.5)", dur: 8 },
-        { top: "20%", left: "70%", size: 2, color: "rgba(6,182,212,0.3)", dur: 11 },
-      ].map((orb, i) => (
-        <motion.div
-          key={i}
-          style={{
-            position: "fixed",
-            top: orb.top, left: orb.left,
-            width: `${orb.size}px`, height: `${orb.size}px`,
-            borderRadius: "50%",
-            background: orb.color,
-            boxShadow: `0 0 ${orb.size * 4}px ${orb.color}`,
-            pointerEvents: "none", zIndex: 0,
-          }}
-          animate={{ y: [0, -20, 0], opacity: [0.4, 1, 0.4], scale: [1, 1.3, 1] }}
-          transition={{ duration: orb.dur, repeat: Infinity, ease: "easeInOut", delay: i * 0.8 }}
-        />
-      ))}
+      <NetworkBackground />
 
       {/* ── LEFT PANEL ─────────────────────── */}
       <motion.div

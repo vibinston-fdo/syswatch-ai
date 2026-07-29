@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import api from "../api";
 import Sidebar from "../components/Sidebar";
+import NetworkBackground from "../components/NetworkBackground";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, PieChart, Pie, Cell
@@ -74,7 +75,7 @@ const Analytics = () => {
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
-      <div style={{ position: "fixed", inset: 0, backgroundImage: `linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)`, backgroundSize: "64px 64px", pointerEvents: "none", zIndex: 0 }} />
+      <NetworkBackground />
 
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 

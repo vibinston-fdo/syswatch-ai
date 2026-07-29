@@ -9,6 +9,15 @@ const Sidebar = ({ alertCount }) => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [time, setTime] = useState(new Date());
+  const [autoPilot, setAutoPilot] = useState(localStorage.getItem("autoPilot") === "true");
+
+  const toggleAutoPilot = () => {
+    const newState = !autoPilot;
+    setAutoPilot(newState);
+    localStorage.setItem("autoPilot", newState);
+    // Dispatch an event so other components know immediately
+    window.dispatchEvent(new Event("autoPilotChanged"));
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -137,6 +146,19 @@ const Sidebar = ({ alertCount }) => {
               <span style={{ fontSize: "11px", color: "#4ade80", fontWeight: "600", letterSpacing: "0.5px" }}>SYSTEM LIVE</span>
               <span style={{ fontSize: "10px", color: "#64748b", fontFamily: "monospace" }}>{time.toLocaleTimeString()}</span>
             </div>
+          </div>
+        )}
+        
+        {!collapsed && (
+          <div style={{ padding: "12px", background: "rgba(14,165,233,0.06)", borderRadius: "12px", border: "1px solid rgba(14,165,233,0.15)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontSize: "11px", color: "#0ea5e9", fontWeight: "600", letterSpacing: "0.5px" }}>AUTO-PILOT</span>
+              <span style={{ fontSize: "9px", color: "#94a3b8" }}>AI Remediation</span>
+            </div>
+            <label className="switch">
+              <input type="checkbox" checked={autoPilot} onChange={toggleAutoPilot} />
+              <span className="slider"></span>
+            </label>
           </div>
         )}
         
