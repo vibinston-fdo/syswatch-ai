@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { LayoutDashboard, Activity, AlertTriangle, BarChart3, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import GlowingLogo from "./GlowingLogo";
 
 const Sidebar = ({ alertCount }) => {
   const navigate = useNavigate();
@@ -120,24 +121,14 @@ const Sidebar = ({ alertCount }) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/dashboard")}
-          style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
+          style={{ cursor: "pointer", marginLeft: collapsed ? "0px" : "12px" }}
         >
-          <motion.div
-            animate={{ boxShadow: ["0 0 16px rgba(124,58,237,0.35)", "0 0 28px rgba(124,58,237,0.6)", "0 0 16px rgba(124,58,237,0.35)"] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{
-              width: "28px", height: "28px", borderRadius: "7px",
-              background: "linear-gradient(135deg, #7c3aed, #6366f1)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0
-            }}
-          >
-            <div style={{ width: "11px", height: "11px", borderRadius: "2px", border: "2px solid rgba(255,255,255,0.85)" }} />
-          </motion.div>
-          {!collapsed && (
-            <span style={{ fontSize: "16px", fontWeight: "700", color: "#f8fafc", letterSpacing: "-0.5px" }}>
-              SysWatch <span className="gradient-text">AI</span>
-            </span>
+          {collapsed ? (
+            <div style={{ transform: "scale(0.8)", transformOrigin: "center", display: "flex", justifyContent: "center" }}>
+              <GlowingLogo size="small" showText={false} />
+            </div>
+          ) : (
+            <GlowingLogo size="small" showText={true} />
           )}
         </motion.div>
       </div>

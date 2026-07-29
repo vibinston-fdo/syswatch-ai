@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api";
 import NetworkBackground from "../components/NetworkBackground";
+import GlowingLogo from "../components/GlowingLogo";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,23 +66,9 @@ const Login = () => {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
+          onClick={() => navigate("/")}
         >
-          <div style={{
-            width: "32px", height: "32px", borderRadius: "8px",
-            background: "linear-gradient(135deg, #7c3aed, #6366f1)",
-            boxShadow: "0 0 24px rgba(124,58,237,0.35)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <div style={{
-              width: "13px", height: "13px", borderRadius: "3px",
-              border: "2px solid rgba(255,255,255,0.85)",
-            }} />
-          </div>
-          <span style={{
-            fontSize: "15px", fontWeight: "600",
-            color: "#f8fafc", letterSpacing: "-0.4px",
-          }}>SysWatch AI</span>
+          <GlowingLogo size="small" />
         </motion.div>
 
         {/* Hero */}
