@@ -116,12 +116,20 @@ const Sidebar = ({ alertCount }) => {
       }}
     >
       {/* Header / Logo */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", marginBottom: "40px", padding: collapsed ? "0" : "0 8px" }}>
+      <div style={{ 
+        display: "flex", 
+        flexDirection: collapsed ? "column" : "row",
+        alignItems: "center", 
+        justifyContent: collapsed ? "center" : "space-between", 
+        marginBottom: "40px", 
+        padding: collapsed ? "0" : "0 4px",
+        gap: collapsed ? "24px" : "0"
+      }}>
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/dashboard")}
-          style={{ cursor: "pointer", marginLeft: collapsed ? "0px" : "12px" }}
+          style={{ cursor: "pointer", marginLeft: collapsed ? "0px" : "8px" }}
         >
           {collapsed ? (
             <div style={{ transform: "scale(0.8)", transformOrigin: "center", display: "flex", justifyContent: "center" }}>
@@ -131,6 +139,25 @@ const Sidebar = ({ alertCount }) => {
             <GlowingLogo size="small" showText={true} />
           )}
         </motion.div>
+
+        {/* Collapse toggle (Desktop only) */}
+        {!isMobile && (
+          <motion.button
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(124,58,237,0.15)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            style={{
+              width: "28px", height: "28px", borderRadius: "8px",
+              background: "rgba(255,255,255,0.03)", 
+              border: "1px solid rgba(255,255,255,0.08)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#a78bfa", cursor: "pointer", flexShrink: 0
+            }}
+          >
+            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          </motion.button>
+        )}
       </div>
 
       {/* Nav Items */}
@@ -233,21 +260,6 @@ const Sidebar = ({ alertCount }) => {
           </motion.button>
         </div>
 
-        {/* Collapse toggle (Desktop only) */}
-        {!isMobile && (
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              position: "absolute", right: "-12px", top: "40px",
-              width: "24px", height: "24px", borderRadius: "50%",
-              background: "#1e293b", border: "1px solid rgba(255,255,255,0.1)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "#94a3b8", cursor: "pointer", zIndex: 10
-            }}
-          >
-            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-          </button>
-        )}
       </div>
     </motion.aside>
     </>
