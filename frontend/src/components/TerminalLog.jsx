@@ -3,10 +3,12 @@ import { motion } from "framer-motion";
 import { Terminal, X } from "lucide-react";
 
 const TerminalLog = ({ logs, onClose }) => {
-  const endRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
   }, [logs]);
 
   return (
@@ -43,7 +45,7 @@ const TerminalLog = ({ logs, onClose }) => {
       </div>
 
       {/* Terminal Body */}
-      <div className="font-mono" style={{
+      <div ref={containerRef} className="font-mono" style={{
         padding: "16px",
         flex: 1,
         overflowY: "auto",
@@ -65,7 +67,6 @@ const TerminalLog = ({ logs, onClose }) => {
             <span style={{ color: log.color || "#cbd5e1" }}>{log.message}</span>
           </motion.div>
         ))}
-        <div ref={endRef} />
       </div>
     </motion.div>
   );
