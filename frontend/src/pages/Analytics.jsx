@@ -38,8 +38,8 @@ const Analytics = () => {
   const fetchData = async () => {
     try {
       const [statsRes, servicesRes] = await Promise.all([
-        axios.get("http://localhost:8000/api/alerts/stats"),
-        axios.get("http://localhost:8000/api/services/metrics/latest"),
+        axios.get("/api/alerts/stats"),
+        axios.get("/api/services/metrics/latest"),
       ]);
       setStats(statsRes.data);
       setServices(servicesRes.data);

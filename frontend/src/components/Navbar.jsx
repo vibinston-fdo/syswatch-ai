@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useTheme } from "../context/ThemeContext";
 
-  const Navbar = ({ alertCount }) => {
+const Navbar = ({ alertCount }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();

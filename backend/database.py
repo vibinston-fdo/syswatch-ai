@@ -13,6 +13,8 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "mysql+pymysql://root:vibin@localhost:3306/syswatch"
 )
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # This creates the actual connection to MySQL
 connect_args = {}

@@ -1,71 +1,33 @@
 # simulator/fake_services.py
-# This file simulates 5 fake microservices
-# Each service sends CPU, memory, latency data every second
-# This makes our dashboard come alive with real data!
+# Simulates 5 fake microservices — each sends CPU, memory, latency data every second.
+# This populates the dashboard with live data and triggers AI anomaly detection.
+
+import sys
+import os
+
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
 
 import requests
 import random
 import time
-import math
-from datetime import datetime
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# ─── BACKEND URL ──────────────────────────────────────────────
-import os
+# Add project root to sys.path so ai.detector can be imported
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
-# ─── 5 FAKE SERVICES ──────────────────────────────────────────
-# Each service has:
-# - id: unique number
-# - name: display name
-# - base_cpu: normal CPU usage
-# - base_memory: normal memory usage
-# - base_latency: normal response time
-
+# ─── 5 FAKE SERVICES ─────────────────────────────────────────
 SERVICES = [
-    {
-        "id": 1,
-        "name": "Auth Service",
-        "base_cpu": 18,
-        "base_memory": 312,
-        "base_latency": 45
-    },
-    {
-        "id": 2,
-        "name": "Payment Service",
-        "base_cpu": 35,
-        "base_memory": 650,
-        "base_latency": 120
-    },
-    {
-        "id": 3,
-        "name": "Notification Service",
-        "base_cpu": 25,
-        "base_memory": 430,
-        "base_latency": 80
-    },
-    {
-        "id": 4,
-        "name": "User Service",
-        "base_cpu": 22,
-        "base_memory": 420,
-        "base_latency": 60
-    },
-    {
-        "id": 5,
-        "name": "DB Service",
-        "base_cpu": 31,
-        "base_memory": 580,
-        "base_latency": 92
-    }
+    {"id": 1, "name": "Auth Service",         "base_cpu": 18,  "base_memory": 312, "base_latency": 45},
+    {"id": 2, "name": "Payment Service",      "base_cpu": 35,  "base_memory": 650, "base_latency": 120},
+    {"id": 3, "name": "Notification Service", "base_cpu": 25,  "base_memory": 430, "base_latency": 80},
+    {"id": 4, "name": "User Service",         "base_cpu": 22,  "base_memory": 420, "base_latency": 60},
+    {"id": 5, "name": "DB Service",           "base_cpu": 31,  "base_memory": 580, "base_latency": 92},
 ]
 
-# ─── ANOMALY SIMULATION ───────────────────────────────────────
-# Every 60 seconds we randomly spike one service
-# This triggers our AI anomaly detection!
-
+# ─── ANOMALY SCHEDULING ──────────────────────────────────────
+# Every 60 seconds a random service gets a metric spike for 15 seconds.
 anomaly_counter = 0
 current_anomaly_service = None
 
@@ -73,143 +35,128 @@ def should_create_anomaly():
     global anomaly_counter, current_anomaly_service
     anomaly_counter += 1
 
-    # Every 60 seconds → pick a random service to spike
+    # Pick a new service to spike every 60 seconds
     if anomaly_counter % 60 == 0:
         current_anomaly_service = random.choice(SERVICES)["id"]
-        print(f"🚨 Simulating anomaly on service {current_anomaly_service}")
+        print(f"[SIM] Simulating anomaly on service id={current_anomaly_service}")
 
-    # Anomaly lasts for 15 seconds
+    # Anomaly lasts 15 ticks
     if anomaly_counter % 60 < 15 and current_anomaly_service:
         return current_anomaly_service
-
     return None
 
-# ─── GENERATE METRIC ──────────────────────────────────────────
-# Generates realistic fake metric for a service
-# Adds small random variations to make it look real
+# ─── METRIC GENERATION ───────────────────────────────────────
+def generate_metric(service: dict, anomaly_service_id) -> dict:
+    cpu     = service["base_cpu"]     + random.uniform(-5, 5)
+    memory  = service["base_memory"]  + random.uniform(-30, 30)
+    latency = service["base_latency"] + random.uniform(-10, 10)
 
-def generate_metric(service, anomaly_service_id):
-
-    # Start with base values
-    cpu     = service["base_cpu"]
-    memory  = service["base_memory"]
-    latency = service["base_latency"]
-
-    # Add small random noise to every reading
-    # This makes the charts look natural not flat
-    cpu     += random.uniform(-5, 5)
-    memory  += random.uniform(-30, 30)
-    latency += random.uniform(-10, 10)
-
-    # If THIS service is having an anomaly → spike it!
+    # If this service is the anomaly target — spike one metric
     if anomaly_service_id == service["id"]:
         anomaly_type = random.choice(["cpu", "memory", "latency"])
-
         if anomaly_type == "cpu":
-            cpu = random.uniform(88, 98)  # spike CPU very high
-            print(f"   ⚡ CPU spike on {service['name']}: {cpu:.1f}%")
-
+            cpu = random.uniform(88, 98)
+            print(f"   [SPIKE] CPU spike on {service['name']}: {cpu:.1f}%")
         elif anomaly_type == "memory":
-            memory = random.uniform(1500, 2000)  # spike memory
-            print(f"   ⚡ Memory spike on {service['name']}: {memory:.0f}MB")
-
+            memory = random.uniform(1500, 2000)
+            print(f"   [SPIKE] Memory spike on {service['name']}: {memory:.0f}MB")
         else:
-            latency = random.uniform(800, 1200)  # spike latency
-            print(f"   ⚡ Latency spike on {service['name']}: {latency:.0f}ms")
-
-    # Make sure values don't go below 0
-    cpu     = max(1, cpu)
-    memory  = max(100, memory)
-    latency = max(10, latency)
+            latency = random.uniform(800, 1200)
+            print(f"   [SPIKE] Latency spike on {service['name']}: {latency:.0f}ms")
 
     return {
         "service_id":   service["id"],
         "service_name": service["name"],
-        "cpu":          round(cpu, 2),
-        "memory":       round(memory, 2),
-        "latency":      round(latency, 2)
+        "cpu":          round(max(1.0, cpu),      2),
+        "memory":       round(max(100.0, memory), 2),
+        "latency":      round(max(10.0, latency), 2),
     }
 
-# ─── REGISTER SERVICES ────────────────────────────────────────
-# Creates all 5 services in database when simulator starts
-
+# ─── REGISTER SERVICES AT STARTUP ────────────────────────────
 def register_services():
-    print("📋 Registering services...")
+    print("[SIM] Registering services with backend...")
     for service in SERVICES:
-        try:
-            requests.post(
-                f"{BASE_URL}/api/services/create",
-                json={"name": service["name"]}
-            )
-            print(f"   ✅ {service['name']} registered")
-        except:
-            print(f"   ❌ Could not register {service['name']}")
+        for attempt in range(5):
+            try:
+                requests.post(
+                    f"{BASE_URL}/api/services/create",
+                    json={"name": service["name"]},
+                    timeout=3,
+                )
+                print(f"   [OK] {service['name']} registered")
+                break
+            except Exception:
+                time.sleep(1)  # backend may still be starting up
+        else:
+            print(f"   [WARN] Could not register {service['name']}")
 
-# ─── MAIN LOOP ────────────────────────────────────────────────
-# This runs forever — sends metrics every second
-
+# ─── MAIN LOOP ───────────────────────────────────────────────
 def run_simulator():
-    print("🚀 SysWatch AI Simulator Starting...")
-    print("📡 Sending metrics every second...")
-    print("🤖 AI anomaly detection will start after 20 data points")
-    print("─" * 50)
+    print("[SIM] SysWatch AI Simulator Starting...")
+    print(f"[SIM] Pushing metrics to {BASE_URL} every second")
+    print("-" * 50)
 
-    # First register all services
+    # Wait briefly for the backend to fully start (especially when auto-launched)
+    time.sleep(3)
+
     register_services()
 
-    # Import detector here to avoid circular imports
     from ai.detector import add_metric, detect_anomaly
 
-    # Run forever
+    print("[SIM] Running — metrics will appear on dashboard momentarily")
+
     while True:
         try:
-            # Check if any service should have anomaly
             anomaly_service_id = should_create_anomaly()
 
-            # Loop through all 5 services
             for service in SERVICES:
-
-                # Generate metric for this service
                 metric = generate_metric(service, anomaly_service_id)
 
-                # Send metric to FastAPI backend
-                requests.post(
-                    f"{BASE_URL}/api/services/metric",
-                    json=metric
-                )
+                # ── Send metric to backend ──────────────────
+                try:
+                    requests.post(
+                        f"{BASE_URL}/api/services/metric",
+                        json=metric,
+                        timeout=3,
+                    )
+                except Exception as e:
+                    print(f"[WARN] Could not push metric for {service['name']}: {e}")
+                    continue
 
-                # Also run AI detection
+                # ── Run AI anomaly detection ────────────────
                 anomaly = detect_anomaly(
                     service["name"],
                     metric["cpu"],
                     metric["memory"],
-                    metric["latency"]
+                    metric["latency"],
                 )
 
-                # Add to AI history
                 add_metric(
                     service["name"],
                     metric["cpu"],
                     metric["memory"],
-                    metric["latency"]
+                    metric["latency"],
                 )
 
-                # If AI detected anomaly → save alert
+                # ── Save alert if anomaly found ─────────────
                 if anomaly:
-                    requests.post(
-                        f"{BASE_URL}/api/alerts/create",
-                        params=anomaly
-                    )
-                    print(f"🚨 ANOMALY DETECTED: {anomaly['alert_type']} on {anomaly['service_name']}")
+                    try:
+                        requests.post(
+                            f"{BASE_URL}/api/alerts/create",
+                            json=anomaly,          # POST JSON body (fixed from params=)
+                            timeout=3,
+                        )
+                        print(f"[ALERT] {anomaly['alert_type']} on {anomaly['service_name']}")
+                    except Exception as e:
+                        print(f"[WARN] Could not save alert: {e}")
 
-            # Wait 1 second before next reading
             time.sleep(1)
 
         except Exception as e:
-            print(f"❌ Error: {e}")
-            print("Retrying in 3 seconds...")
+            print(f"[ERR] Simulator error: {e}")
+            print("[SIM] Retrying in 3 seconds...")
             time.sleep(3)
 
-# ─── RUN ──────────────────────────────────────────────────────
+
 if __name__ == "__main__":
     run_simulator()

@@ -4,7 +4,7 @@
 
 import numpy as np
 from sklearn.ensemble import IsolationForest
-from datetime import datetime
+from datetime import datetime, timezone
 
 # ─── AI MODEL SETUP ───────────────────────────────────────────
 model = IsolationForest(
@@ -108,7 +108,7 @@ def detect_anomaly(service_name: str, cpu: float, memory: float, latency: float)
         # COOLDOWN CHECK
         # Don't spam same alert for same service
         alert_key = f"{service_name}_{alert_type}"
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         if alert_key in recent_alerts:
             last_time = recent_alerts[alert_key]
@@ -130,7 +130,7 @@ def detect_anomaly(service_name: str, cpu: float, memory: float, latency: float)
             "severity":       severity,
             "confidence":     round(confidence, 1),
             "fix_suggestion": fix,
-            "timestamp":      datetime.utcnow().isoformat()
+            "timestamp":      datetime.now(timezone.utc).isoformat()
         }
 
     return None
